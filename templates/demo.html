@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html>
+<head>
+<title>表单</title>
+<meta charset="utf-8" />
+</head>
+<body>
+	<!-- form是表单，内部可以包含多个控件，
+控件内可以输入值。我们是以表单为单元进行提交的，
+一次要提交一个表单所包含的所有控件的值。
+表单只是用来圈定提交的范围，它是透明不可见的。 -->
+	<form action="http://www.baidu.com">
+		<!-- 文本框 -->
+		<p>
+			<!-- label是表单中的文本，通过for属性可以绑定到input元素上，使得点击此label时，相当于点击了对应的input.
+id是元素的身份证号，用来引用该元素。 -->
+			<label for="username">账号：</label> <input type="text" id="username" value="123" />
+		</p>
+		<p>
+			<label for="password">密码：</label> <input type="password"
+				id="password" />
+		</p>
+		<!-- 单选框 -->
+		<!-- 一组单选框，他们之间是彼此互斥的。同名的radio即为同一组。 -->
+		<p>
+			性别： <input type="radio" id="male" name="sex" /> <label for="male">男</label>
+			<input type="radio" id="female" name="sex" /> <label for="female">女</label>
+		</p>
+		<!-- 多选框 -->
+		<p>
+			兴趣： <input type="checkbox" id="basketball" name="favorites" checked />
+			<label for="basketball">篮球</label> <input type="checkbox"
+				id="football" name="favorites" /> <label for="football">篮球</label>
+			<input type="checkbox" id="pingpang" name="favorites" /> <label
+				for="pinagpang">篮球</label>
+		</p>
+		<!-- 提交、重置、普通按钮 -->
+		<p>
+			<input type="submit" value="提交" /> <input type="reset" value="重置" />
+			<input type="button" value="取消" /><!-- button按钮没有默认功能，需要后期用js定义 -->
+		</p>
+        <!-- 隐藏域=隐藏的文本框。
+        用来封装一些不希望被用户看到的数据，
+        该控件中的数据不需要输入，而是预置。 -->
+        <p>
+        <input type="hidden" value="123"/>
+        </p>
+         <!-- 文件选择框 -->
+        <p>
+        <label for="attachment">上传附件：</label>
+        <input type="file" id="attachment"/>
+        </p>
+        <!-- 文本域 -->
+        <p>
+        <label for="desc">自我介绍：</label>
+        <textarea id="desc" rows="5" cols="20">我是一个人类</textarea>
+        </p>
+        <!-- 下拉选 -->
+        <p>
+        <label for="course">课程：</label>
+        <select id="course">
+        <option>--请选择</option>
+        <option>Java</option>
+        <option>php</option>
+        <option>ios</option>
+        </select>
+        </p>
+	</form>
+</body>
+
+</html>
