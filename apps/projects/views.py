@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from projects.models import Projects
 from interfaces.models import Interfaces
-from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer,ReadsSerializer
+from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer, ReadsSerializer
 from rest_framework.decorators import action
 from utils import common
 from datetime import datetime
@@ -47,8 +47,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             "message": "OK",
         })
 
-
-
     # 搜索
     @action(methods=['post'], detail=False)
     def reads(self, request, *args, **kwargs):
@@ -88,7 +86,12 @@ class ProjectsViewSet(viewsets.ModelViewSet):
                 'id': obj.id,
                 'name': obj.name
             })
-        return Response(data=one_list)
+        # return Response(data=one_list)
+        return Response({
+            "code": 200,
+            "data": {"data": one_list},
+            "message": "OK",
+        })
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -111,7 +114,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             "data": {"data": datas},
             "message": "OK",
         })
-
 
     @action(methods=['post'], detail=True)
     def run(self, request, *args, **kwargs):

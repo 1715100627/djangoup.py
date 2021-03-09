@@ -95,7 +95,13 @@ class InterfacesViewSet(viewsets.ModelViewSet):
                 'id': obj.id,
                 'name': obj.name
             })
-        return Response(data=one_list)
+        # return Response(data=one_list)
+        return Response({
+            "code": 200,
+            "data": {"data": one_list},
+            "message": "OK",
+        })
+
 
     @action(detail=True)
     def testcases(self, request, pk=None):
@@ -106,7 +112,12 @@ class InterfacesViewSet(viewsets.ModelViewSet):
                 'id': obj.id,
                 'name': obj.name
             })
-        return Response(data=one_list)
+        # return Response(data=one_list)
+        return Response({
+            "code": 200,
+            "data": {"data": one_list},
+            "message": "OK",
+        })
 
     @action(methods=['post'], detail=True)
     def run(self, request, *args, **kwargs):
