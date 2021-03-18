@@ -30,7 +30,7 @@ class ReportViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['results'] = format_output(response.data['results'])
+        # response.data['results'] = format_output(response.data['results'])
         return response
 
     @action(detail=True)

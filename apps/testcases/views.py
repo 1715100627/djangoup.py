@@ -30,6 +30,19 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         instance.is_delete = True
         instance.save()  # 逻辑删除
 
+    def create(self, request, *args, **kwargs):
+        # super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response({
+            "code": 200,
+            "data": {"data": serializer.data},
+            "message": "OK",
+        })
+
+
     # 搜索
     @action(methods=['post'], detail=False)
     def reads(self, request, *args, **kwargs):

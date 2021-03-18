@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.response import Response
+
 from testcases.models import Testcases
 from projects.models import Projects
 from interfaces.models import Interfaces
@@ -39,6 +41,11 @@ class TestcaseModeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         interface_dict = validated_data.pop('interface')
         validated_data['interface_id'] = interface_dict['iid']
+        # return Response({
+        #     "code": 200,
+        #     "data": {"data": Testcases.objects.create(**validated_data)},
+        #     "message": "OK",
+        # })
         return Testcases.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
