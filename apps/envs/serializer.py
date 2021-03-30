@@ -22,4 +22,4 @@ class EnvModeSerializer(serializers.ModelSerializer):
 class ReadsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Envs
-        fields = ('id', 'name', 'base_url', 'desc', 'create_time')
+        fields = ('id', 'name', 'base_url', 'desc', 'create_time','is_active')

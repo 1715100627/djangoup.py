@@ -41,3 +41,11 @@ class ConfiguresSerializer(serializers.ModelSerializer):
             interface_dict = validated_data.pop('interface')
             validated_data['interface_id'] = interface_dict['iid']
         return super().update(instance, validated_data)
+
+
+class ReadsSerializer(serializers.ModelSerializer):
+    interface = IntercfacesAnotherSerializer(help_text='项目ID和接口ID')
+
+    class Meta:
+        model = Configures
+        fields = ('id', 'name', 'author', 'interface')

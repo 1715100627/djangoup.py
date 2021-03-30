@@ -9,9 +9,9 @@ from envs.models import Envs
 from .utils import get_testcases_by_interface_ids
 from testcases.models import Testcases
 from testsuits.models import Testsuits
-from testsuits.serializer import TestSuitsModeSerializer
+from testsuits.serializer import TestSuitsModeSerializer, ReadsSerializer
 from utils import common
-from utils.utils import get_paginated_response_update,get_paginated_response
+from utils.utils import get_paginated_response_update, get_paginated_response
 from .serializer import TestsuitsRunSerializer
 
 
@@ -28,10 +28,36 @@ class TestSuitsViewSet(viewsets.ModelViewSet):
         instance.is_delete = True
         instance.save()  # 逻辑删除
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": response.data},
+            "message": "OK",
+        })
+
+    # 搜索
+    @action(methods=['post'], detail=False)
+    def reads(self, request, *args, **kwargs):
+
+        names = request.data.get('data')  # 获取参数
+
+        if names is not '':
+            # __contains模糊查询
+            queryset = Testsuits.objects.filter(name__contains=names)
+        else:
+            queryset = self.filter_queryset(self.get_queryset())
+        serializer = ReadsSerializer(queryset, many=True)
+        return Response({
+            "code": 200,
+            "data": {"data": serializer.data},
+            "message": "OK",
+        })
+
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response['results'] = get_paginated_response_update(response.data['results'])
-        response['results'] = get_paginated_response(response.data['results'])
+        response['results'] = get_paginated_response_update(response.data['data']['data'])
+        response['results'] = get_paginated_response(response.data['data']['data'])
         return response
 
     @action(methods=['post'], detail=True)

@@ -33,7 +33,7 @@ class ProjectNameSerializer(serializers.ModelSerializer):
 class ReadsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Projects
-        fields = ('id', 'name', 'leader', 'tester', 'programmer', 'publish_app', 'desc')
+        fields = ('id', 'name', 'leader', 'tester', 'programmer', 'publish_app', 'desc','create_time')
 
 
 # class InterfacesNameSerializer(serializers.ModelSerializer):

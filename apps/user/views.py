@@ -11,7 +11,9 @@ def get_user_info(request):
         user_id = toke_user["user_id"]
         data = {
             "code": 200,
-            "message": "请求成功"
+            "message": "请求成功",
+            'toke_user': toke_user,
+            'user_id': user_id
         }
         return JsonResponse(data)
 

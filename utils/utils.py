@@ -7,8 +7,10 @@ from testsuits.models import Testsuits
 def get_paginated_response(datas):
     list = []
     for item in datas:
-        mtch = re.search(r'(.*)T(.*)\..*?', item['create_time'])
-        item['create_time'] = mtch.group(1) + ' ' + mtch.group(2)
+        mtch1 = item['create_time'].split('T')[0]
+        # mtch2 = item['create_time'].split('T')[1].split('+')[0] +' '+ item['create_time'].split('T')[1].split('+')[1]
+        mtch2 = item['create_time'].split('T')[1].split('.')[0]
+        item['create_time'] = mtch1 + ' ' + mtch2
 
         project_id = item['id']
         # Interfaces.objects.filter(project_id=project_id,is_delete=False)
@@ -46,14 +48,20 @@ def get_paginated_response(datas):
 def get_paginated_response_update(datas):
     list = []
     for i in datas:
-        mtch = re.search(r'(.*)T(.*)\..*?', i['update_time'])
-        i['update_time'] = mtch.group(1) + ' ' + mtch.group(2)
-    return list.append(datas)
+        # mtch = re.search(r'(.*)T(.*)\..*?', i['update_time'])
+        # i['update_time'] = mtch.group(1) + ' ' + mtch.group(2)
+        mtch1 = i['update_time'].split('T')[0]
+        mtch2 = i['update_time'].split('T')[1].split('.')[0]
+        i['update_time'] = mtch1 + ' ' + mtch2
+        list.append(datas)
+    return list
 
 def get_paginated_response_create(datas):
     # list = []
     for i in datas:
-        mtch = re.search(r'(.*)T(.*)\..*?', i['create_time'])
-        i['create_time'] = mtch.group(1) + ' ' + mtch.group(2)
-    # return list.append(datas)
+        # mtch = re.search(r'(.*)T(.*)\..*?', i['create_time'])
+        # i['create_time'] = mtch.group(1) + ' ' + mtch.group(2)
+        mtch1 = i['create_time'].split('T')[0]
+        mtch2 = i['create_time'].split('T')[1].split('.')[0]
+        i['create_time'] = mtch1 + ' ' + mtch2
     return datas

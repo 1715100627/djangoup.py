@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from utils.base_models import BaseModel
 from testsuits.models import Testsuits
@@ -46,3 +47,12 @@ class TestsuitsRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ('id', 'env_id')
+
+
+class ReadsSerializer(serializers.ModelSerializer):
+    project = serializers.StringRelatedField(help_text='项目名称')
+    project_id = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(), help_text='项目ID')
+
+    class Meta:
+        model = Testsuits
+        fields = ('id', 'name', 'project_id', 'project', 'create_time', 'update_time')

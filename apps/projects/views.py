@@ -3,6 +3,8 @@ from rest_framework import viewsets, status
 from rest_framework import permissions
 from rest_framework.response import Response
 
+
+from utils.utils import get_paginated_response_create
 from projects.models import Projects
 from interfaces.models import Interfaces
 from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer, ReadsSerializer
@@ -40,10 +42,10 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         })
 
     def create(self, request, *args, **kwargs):
-        super().create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": "添加成功",
+            "data": {'data': response.data},
             "message": "OK",
         })
 
@@ -59,9 +61,10 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         else:
             queryset = self.filter_queryset(self.get_queryset())
         serializer = ReadsSerializer(queryset, many=True)
+        serializer = get_paginated_response_create(serializer.data)
         return Response({
             "code": 200,
-            "data": {"data": serializer.data},
+            "data": {"data": serializer},
             "message": "OK",
         })
 
@@ -104,14 +107,17 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(datas)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        serializer = get_paginated_response_create(serializer.data)
+        return Response(serializer)
+
+        # response = super().list(request, *args, **kwargs)
+        # return response
 
     def update(self, request, *args, **kwargs):
-        super().update(request, *args, **kwargs)
-        datas = request.data
+        response = super().update(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": {"data": datas},
+            "data": {"data": response.data},
             "message": "OK",
         })
 

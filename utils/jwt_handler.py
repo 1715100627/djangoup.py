@@ -4,8 +4,11 @@ import rest_framework_jwt
 def jwt_response_payload_handler(token, user=None, request=None):
     return {
         'token': token,
-        'user_id': user.id,
-        'user_name': user.username,
+        'userInfo': {
+            'user_id': user.id,
+            'user_name': user.username,
+            'roles': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        },
         'code': 200
     }
 
