@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'reports.apps.ReportsConfig',
     'testcases.apps.TestcasesConfig',
     'testsuits.apps.TestsuitsConfig',
-    'summary.apps.SummaryConfig'
+    'summary.apps.SummaryConfig',
+    'module.apps.ModuleConfig',
 ]
 # 渲染api页面
 REST_FRAMEWORK = {

@@ -24,7 +24,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectModeSerializer
     # 指定过滤引擎
     # filter_fields = [DjangoFilterBackend]
-    filter_fields = ['id', 'name', 'tester']
+    filter_fields = ['id', 'name']
     # 指定权限类
     permission_classes = [permissions.IsAuthenticated]
 

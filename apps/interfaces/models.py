@@ -29,6 +29,8 @@ class Interfaces(BaseModel):
     # 第二个设置为父表删除，字表处理方式 CASCADE父表删除字表自动删除 SET_NULL被设置为none PROJECT报错 SET_DEFAULT设置默认值
     project = models.ForeignKey('projects.Projects', on_delete=models.CASCADE,
                                 related_name='interfaces', help_text='所属项目')
+    module = models.ForeignKey('module.Module', related_name='module', on_delete=models.CASCADE, null=True, blank=True,
+                               verbose_name='所属模块')
     envs = models.ForeignKey('envs.Envs', on_delete=models.CASCADE,
                                 related_name='envs', help_text='运行环境')
     tester = models.CharField(verbose_name='测试人员', max_length=50, help_text='测试人员')

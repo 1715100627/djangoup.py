@@ -2,21 +2,23 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from projects.models import Projects
 from debugtalks.models import Debugtalks
+from envs.models import Envs
 from interfaces.models import Interfaces
 
 
+class EnvsModeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Envs
+        fields = '__all__'
+
+
 class ProjectModeSerializer(serializers.ModelSerializer):
+    envs = EnvsModeSerializer(many=True)
+
     class Meta:
         model = Projects
-        # filter=('id','name','leader','tester')
-        # filter = '__all__'
-        exclude = ('update_time', 'is_delete')
-        # read_only_fields = ('leader', 'tester')
-        extra_kwarge = {
-            'create_time': {
-                "read_only": True
-            },
-        }
+        fields = '__all__'
+
 
     def create(self, validated_data):
         project_obj = super().create(validated_data)
