@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from utils.utils import get_paginated_response_create
 from projects.models import Projects
 from interfaces.models import Interfaces
-from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer, ReadsSerializer
+from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer,ProjectCreModeserializer
 from rest_framework.decorators import action
 from utils import common
 from datetime import datetime
@@ -41,13 +41,25 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             "message": "OK",
         })
 
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        return Response({
-            "code": 200,
-            "data": {'data': response.data},
-            "message": "OK",
-        })
+    # def create(self, request, *args, **kwargs):
+    #     list = []
+    #
+    #     cont = -1
+    #     for i in request.data.get('envs'):
+    #         dict = {}
+    #         cont += 1
+    #         dict[cont] = i
+    #         list.append(dict)
+    #     envs = request.data.pop('envs')
+    #     request.data['envs'] = list
+    #     response = super().create(request, *args, **kwargs)
+    #     return Response({
+    #         "code": 200,
+    #         "data": {'data': response.data},
+    #         "message": "OK",
+    #     })
+
+
 
     # 搜索
     @action(methods=['post'], detail=False)
@@ -57,10 +69,10 @@ class ProjectsViewSet(viewsets.ModelViewSet):
 
         if names is not '':
             # __contains模糊查询
-            queryset = Projects.objects.filter(name__contains=names)
+            queryset = Projects.objects.filter(name__contains=names, is_delete=False)
         else:
             queryset = self.filter_queryset(self.get_queryset())
-        serializer = ReadsSerializer(queryset, many=True)
+        serializer = ProjectModeSerializer(queryset, many=True)
         serializer = get_paginated_response_create(serializer.data)
         return Response({
             "code": 200,
@@ -113,13 +125,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         # response = super().list(request, *args, **kwargs)
         # return response
 
-    def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
-        return Response({
-            "code": 200,
-            "data": {"data": response.data},
-            "message": "OK",
-        })
 
     @action(methods=['post'], detail=True)
     def run(self, request, *args, **kwargs):
@@ -161,3 +166,24 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             return ProjectsRunSerializer
         else:
             return self.serializer_class
+
+
+class ProjectsAddViewSet(viewsets.ModelViewSet):
+    queryset = Projects.objects.filter(is_delete=False)
+    serializer_class = ProjectCreModeserializer
+
+    def create(self, request, *args, **kwargs):
+        res = super().create(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": res.data},
+            "message": "OK",
+        })
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": response.data},
+            "message": "OK",
+        })

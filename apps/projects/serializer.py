@@ -20,10 +20,20 @@ class ProjectModeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProjectCreModeserializer(serializers.ModelSerializer):
+
     def create(self, validated_data):
         project_obj = super().create(validated_data)
         Debugtalks.objects.create(project=project_obj)
         return project_obj
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        return instance
+
+    class Meta:
+        model = Projects
+        fields = '__all__'
 
 
 class ProjectNameSerializer(serializers.ModelSerializer):
@@ -31,11 +41,6 @@ class ProjectNameSerializer(serializers.ModelSerializer):
         model = Projects
         fields = ('id', 'name')
 
-
-class ReadsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = ('id', 'name', 'leader', 'tester', 'programmer', 'publish_app', 'desc','create_time')
 
 
 # class InterfacesNameSerializer(serializers.ModelSerializer):

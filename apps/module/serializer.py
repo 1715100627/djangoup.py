@@ -11,3 +11,11 @@ class ModuleModeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('id', 'name', 'parent', 'floor', 'project','desc','tester')
+
+class ModuleFindModeSerializer(serializers.ModelSerializer):
+    parent = serializers.CharField(read_only=True)
+    project = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Module
+        fields = ('id', 'name', 'parent', 'floor', 'project','desc','tester')

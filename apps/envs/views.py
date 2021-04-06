@@ -70,7 +70,12 @@ class EnvsViewSet(viewsets.ModelViewSet):
     def names(self, request, pk=None):
         queryset = self.get_queryset()
         serializer = self.get_serializer(instance=queryset, many=True)
-        return Response(serializer.data)
+        return Response({
+            "code": 200,
+            "data": {"data": serializer.data},
+            "message": "OK",
+        })
+        # return Response(serializer.data)
 
     # 搜索
     @action(methods=['post'], detail=False)

@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 # 注册路由
 # 1.路由前缀 2.视图集
 router.register(r'projects', views.ProjectsViewSet)
+router.register(r'projadd', views.ProjectsAddViewSet)
 urlpatterns = [
 ]
 urlpatterns += router.urls
