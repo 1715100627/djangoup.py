@@ -42,24 +42,15 @@ class ProjectNameSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-
-# class InterfacesNameSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Interfaces
-#         fields = ('id', 'name', 'tester')
-#
-#
-# class InterfacesByProjectIdSerializer(serializers.ModelSerializer):
-#     interfaces_set = InterfacesNameSerializer(read_only=True, many=True)
-
-# class Meta:
-#     model = Projects
-#     fields = ('id', 'interfaces_set')
-
-
 class ProjectsRunSerializer(serializers.ModelSerializer):
     env_id = serializers.IntegerField(help_text="环境变量ID", write_only=True)
 
     class Meta:
         model = Projects
         fields = ('id', 'env_id')
+
+
+class ProjectModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ('id', 'name', 'is_delete')

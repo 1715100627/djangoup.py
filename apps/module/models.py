@@ -10,7 +10,7 @@ class Module(BaseModel):
     parent = models.ForeignKey(to='Module', related_name='+', on_delete=models.CASCADE, null=True, blank=True,
                                verbose_name='父节点')
     floor = models.IntegerField(null=False, blank=False, default=1, verbose_name='树结构级数')
-    tester = models.CharField(verbose_name='测试人员', max_length=50, help_text='测试人员')
+    tester = models.CharField(verbose_name='测试人员', max_length=50, help_text='测试人员',null=True, blank=True)
     desc = models.CharField(verbose_name='描述信息', max_length=200, help_text='描述信息', null=True, blank=True, default='', )
 
     class Meta:
