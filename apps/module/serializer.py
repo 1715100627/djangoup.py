@@ -33,3 +33,10 @@ class ModuleCreadModeSerializer(serializers.ModelSerializer):
         model = Module
         fields = "__all__"
 
+
+class ModuleListModeSerializer(serializers.ModelSerializer):
+    project = ProjectModuleSerializer()
+
+    class Meta:
+        model = Module
+        fields = '__all__'

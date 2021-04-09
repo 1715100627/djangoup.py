@@ -1,14 +1,15 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from projects.models import Projects
 from module.models import Module
 from rest_framework import viewsets, status
-from module.serializer import ModuleModeSerializer, ModuleFindModeSerializer,ModuleCreadModeSerializer
+from module.serializer import ModuleModeSerializer, ModuleFindModeSerializer,ModuleCreadModeSerializer,ModuleListModeSerializer
 
 
 class ModularViewSet(viewsets.ModelViewSet):
     queryset = Module.objects.filter(is_delete=False)
-    serializer_class = ModuleModeSerializer
+    serializer_class = ModuleListModeSerializer
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
@@ -32,7 +33,17 @@ class ModularViewSet(viewsets.ModelViewSet):
             queryset = Module.objects.filter(project=id)
         else:
             queryset = self.filter_queryset(self.get_queryset())
-        serializer = ModuleFindModeSerializer(queryset, many=True)
+        serializer = ModuleCreadModeSerializer(queryset, many=True)
+        return Response({
+            "code": 200,
+            "data": {"data": serializer.data},
+            "message": "OK",
+        })
+
+    @action(methods=['GET'], detail=True)
+    def names(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = ModuleFindModeSerializer(instance=queryset, many=True)
         return Response({
             "code": 200,
             "data": {"data": serializer.data},
@@ -61,6 +72,17 @@ class CreateModularViewSet(viewsets.ModelViewSet):
             data['floor'] = 1
 
         response = super().create(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": response.data},
+            "message": "OK",
+        })
+
+    def update(self, request, *args, **kwargs):
+        # project = Projects.objects.filter(id=request.data.get('project')).filter()
+        # requests = request.data.pop('project')
+        # request.data['project'] = project
+        response = super().update(request,*args, **kwargs)
         return Response({
             "code": 200,
             "data": {"data": response.data},
