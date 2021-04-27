@@ -7,9 +7,10 @@ from rest_framework import permissions
 
 from envs.models import Envs
 from interfaces.models import Interfaces
-from interfaces.serializer import InterfacesModeSerializer, InterfacesRunSerializer, inReadsSerializer
+from interfaces.serializer import InterfacesModeSerializer, InterfacesRunSerializer, inReadsSerializer,CreateMOdelSerializer
 from rest_framework.decorators import action
 
+from .filter import InterfacesFilter
 from utils import common
 from utils.utils import get_paginated_response, get_paginated_response_create
 from testcases.models import Testcases
@@ -19,6 +20,7 @@ from django.conf import settings
 
 class InterfacesViewSet(viewsets.ModelViewSet):
     queryset = Interfaces.objects.filter(is_delete=False)
+    filter_class = InterfacesFilter
     serializer_class = InterfacesModeSerializer
     # 指定过滤引擎
     # filter_fields = [DjangoFilterBackend]
@@ -39,34 +41,29 @@ class InterfacesViewSet(viewsets.ModelViewSet):
             "message": "OK",
         })
 
-    def update(self, request, *args, **kwargs):
-        super().update(request, *args, **kwargs)
-        return Response({
-            "code": 200,
-            "data": {"data": request.data},
-            "message": "OK",
-        })
 
-    def create(self, request, *args, **kwargs):
-        super().create(request, *args, **kwargs)
-        return Response({
-            "code": 200,
-            "data": {"data": request.data},
-            "message": "OK",
-        })
+    # def create(self, request, *args, **kwargs):
+    #     super().create(request, *args, **kwargs)
+    #     return Response({
+    #         "code": 200,
+    #         "data": {"data": request.data},
+    #         "message": "OK",
+    #     })
 
     # 搜索
     @action(methods=['post'], detail=False)
     def reads(self, request, *args, **kwargs):
 
-        names = request.data.get('data')  # 获取参数
+        project = request.data.get('project')
+        name = request.data.get('name')
+        url = request.data.get('url')
 
-        if names is not '':
+        if project is not '':
             # __contains模糊查询
-            queryset = Interfaces.objects.filter(name__contains=names)
+            queryset = Interfaces.objects.filter(project=project)
         else:
             queryset = self.filter_queryset(self.get_queryset())
-        serializer = inReadsSerializer(queryset, many=True)
+        serializer = InterfacesModeSerializer(queryset, many=True)
         return Response({
             "code": 200,
             "data": {"data": serializer.data},
@@ -150,3 +147,24 @@ class InterfacesViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return InterfacesRunSerializer if self.action == 'run' else self.serializer_class
+
+
+class CreateModelViewSet(viewsets.ModelViewSet):
+    queryset = Interfaces.objects.filter(is_delete=False)
+    serializer_class = CreateMOdelSerializer
+
+    def create(self, request, *args, **kwargs):
+        super().create(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": request.data},
+            "message": "OK",
+        })
+
+    def update(self, request, *args, **kwargs):
+        super().update(request, *args, **kwargs)
+        return Response({
+            "code": 200,
+            "data": {"data": request.data},
+            "message": "OK",
+        })

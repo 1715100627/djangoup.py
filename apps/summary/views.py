@@ -10,7 +10,7 @@ from testsuits.models import Testsuits
 from configures.models import Configures
 from envs.models import Envs
 from debugtalks.models import Debugtalks
-from reports.models import Reports
+from testcase_reports.models import Reports
 
 
 class SummaryAPIView(APIView):

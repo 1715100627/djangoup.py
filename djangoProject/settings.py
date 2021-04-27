@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'configures.apps.ConfiguresConfig',
     'debugtalks.apps.DebugtalksConfig',
     'envs.apps.EnvsConfig',
-    'reports.apps.ReportsConfig',
+    'testcase_reports.apps.ReportsConfig',
     'testcases.apps.TestcasesConfig',
     'testsuits.apps.TestsuitsConfig',
     'summary.apps.SummaryConfig',
@@ -184,7 +184,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST = ()
 
 # 测试报告存放路径
-REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
+REPORTS_DIR = os.path.join(BASE_DIR, 'testcase_reports')
 # 测试用例存放路径
 SUITES_DIR = os.path.join(BASE_DIR, 'suites')
 

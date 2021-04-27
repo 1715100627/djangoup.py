@@ -28,7 +28,7 @@ urlpatterns = [
     path('', include('testsuits.urls')),
     path('', include('configures.urls')),
     path('', include('testcases.urls')),
-    path('', include('reports.urls')),
+    path('', include('testcase_reports.urls')),
     path('', include('summary.urls')),
     path('', include('module.urls')),
     path('docs/', include_docs_urls(title='接口文档',

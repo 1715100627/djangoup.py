@@ -1,5 +1,7 @@
 # from .views import index
 from django.urls import path, include
+from .views import *
+from django.conf.urls import url
 from testcases import views
 from rest_framework import routers
 
@@ -10,6 +12,7 @@ router = routers.DefaultRouter()
 # 1.路由前缀 2.视图集
 router.register(r'testcases', views.TestcasesViewSet)
 urlpatterns = [
+    url(r'testcases/batch/', TestcaseBatchAPIView.as_view()),
 ]
 urlpatterns += router.urls
 

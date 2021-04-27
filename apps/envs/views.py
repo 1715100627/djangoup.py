@@ -32,10 +32,10 @@ class EnvsViewSet(viewsets.ModelViewSet):
 
     # 自定义删除返回信息
     def destroy(self, request, *args, **kwargs):
-        super().destroy(request, *args, **kwargs)
+        response = super().destroy(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": "删除成功",
+            "data": response.data,
             "message": "OK",
         })
 
@@ -53,7 +53,7 @@ class EnvsViewSet(viewsets.ModelViewSet):
         # return Response(serializer.data)
 
         response = super().list(request, *args, **kwargs)
-        response['results'] = get_paginated_response(response.data['data']['data'])
+        # response['results'] = get_paginated_response(response.data['data']['data'])
         return response
 
     def update(self, request, *args, **kwargs):

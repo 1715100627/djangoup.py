@@ -35,11 +35,6 @@ class InterfacesModeSerializer(serializers.ModelSerializer):
         #     },
         # }
 
-    def create(self, validated_data):
-        project = validated_data.pop('project_id')
-        validated_data['project'] = project
-        interface = Interfaces.objects.create(**validated_data)
-        return interface
 
     def update(self, instance, validated_data):
         if 'project_id' in validated_data:
@@ -63,3 +58,19 @@ class inReadsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
         fields = ('id', 'name', 'project', 'tester', 'desc')
+
+
+class CreateMOdelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interfaces
+        fields = '__all__'
+        extra_kwargs = {
+            'project': {'required': True},
+            'module':{'required':True}
+        }
+
+    # def create(self, validated_data):
+    #     project = validated_data.pop('project_id')
+    #     validated_data['project'] = project
+    #     interface = Interfaces.objects.create(**validated_data)
+    #     return interface

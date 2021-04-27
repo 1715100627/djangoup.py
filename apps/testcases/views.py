@@ -1,20 +1,23 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from testcase_reports.utils import get_version
 from testcases.models import Testcases
-from testcases.serializer import TestcaseModeSerializer, TestcaseRunSerializer, ReadsSerializer
+from testcases.serializer import TestcaseModeSerializer
 import json
-from datetime import datetime
+from rest_framework.views import APIView
 import os
 from django.conf import settings
 from rest_framework.decorators import action
 from utils.utils import get_paginated_response
 from utils import handle_datas
 from interfaces.models import Interfaces
-from configures.models import Configures
+from .testcases_task import batch_exec_testcase
 from envs.models import Envs
-from httprunner import HttpRunner
-from utils import common
+from .http_dlient import HttpSession
+from .testcase_debug import HttpTestcaseDebug
 
 
 class TestcasesViewSet(viewsets.ModelViewSet):
@@ -30,170 +33,96 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         instance.is_delete = True
         instance.save()  # 逻辑删除
 
-    # 自定义删除返回信息
-    def destroy(self, request, *args, **kwargs):
-        super().destroy(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": "删除成功",
+            "data": {"data": response.data},
             "message": "OK",
         })
 
     def update(self, request, *args, **kwargs):
-        super().update(request, *args, **kwargs)
+        response = super().update(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": {"data": request.data},
+            "data": {"data": response.data},
             "message": "OK",
         })
 
-    def create(self, request, *args, **kwargs):
-        # super().create(request, *args, **kwargs)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
+    def partial_update(self, request, *args, **kwargs):
+        response = super().partial_update(request, *args, **kwargs)
         return Response({
             "code": 200,
-            "data": {"data": serializer.data},
+            "data": {"data": response.data},
             "message": "OK",
         })
 
+    @action(['POST'], detail=False)
+    def debug(self, request, *args, **kwargs):
+        data = request.data
+        env_id = data.get('env_id')
+        testcase = data.get('testcase')
+        name = testcase.get('name')
+        api_id = testcase.get('api')
+        headers = testcase.get('headers')
+        request_data = testcase.get('request_data')
+        request_data_type = testcase.get('request_data_type')
+        expect_result = testcase.get('expect_result')
 
-    # 搜索
-    @action(methods=['post'], detail=False)
-    def reads(self, request, *args, **kwargs):
+        api = Interfaces.objects.filter(id=api_id, is_delete=False).first()
+        method = api.method
 
-        names = request.data.get('data')  # 获取参数
-
-        if names is not '':
-            # __contains模糊查询
-            queryset = Testcases.objects.filter(name__contains=names)
-        else:
-            queryset = self.filter_queryset(self.get_queryset())
-        serializer = ReadsSerializer(queryset, many=True)
-        return Response({
-            "code": 200,
-            "data": {"data": serializer.data},
-            "message": "OK",
-        })
-
-    def retrieve(self, request, *args, **kwargs):
-        testcase_obj = self.get_object()
-
-        # 前置信息
-        testcase_include = json.loads(testcase_obj.include)
-
-        # 请求信息
-        testcase_request = json.loads(testcase_obj.request)
-        testcase_request_datas = testcase_request.get('test').get('request')
-
-        # validate断言
-        testcase_validate = testcase_request.get('test').get('request').get('validate')
-        testcase_validate_list = handle_datas.handle_data3(testcase_validate)
-
-        # 处理用例param数据，查询字符串参数
-        testcase_param = testcase_request_datas.get('param')
-        testcase_param_list = handle_datas.handle_data1(testcase_param)
-
-        # 处理header请求头
-        testcase_headers = testcase_request_datas.get('headers')
-        testcase_headers_list = handle_datas.handle_data1(testcase_headers)
-
-        # 处理用例variables全局
-        testcase_variables = testcase_request.get('test').get('request').get('variables')
-        testcase_variables_list = handle_datas.handle_data2(testcase_variables)
-
-        # 处理form表单数据
-        testcase_from_dasts = testcase_request_datas.get('data')
-        testcase_from_dasts_list = handle_datas.handle_data4(testcase_from_dasts)
-
-        # 处理json数据
-        testcase_json_datas = json.dumps(testcase_request_datas.get('json'), ensure_ascii=False)
-
-        # 处理extract数据，提取token
-        # testcase_extract_datas = testcase_request.get('test').get('extract')
-        testcase_extract_datas = testcase_request.get('test').get('request').get('extract')
-        testcase_extract_datas_list = handle_datas.handle_data5(testcase_extract_datas)
-
-        # 处理paramets数据，参数化
-        testcase_parameters_datas = testcase_request.get('test').get('request').get('parameters')
-        testcase_parameters_datas_list = handle_datas.handle_data5(testcase_parameters_datas)
-
-        # 处理setupHooks数据前置
-        testcase_setup_hooks_datas = testcase_request.get('test').get('request').get('setup_hooks')
-        testcase_setup_hooks_datas_list = handle_datas.handle_data6(testcase_setup_hooks_datas)
-
-        # 处理teardownHooks数据
-        testcase_teardown_hooks_datas = testcase_request.get('test').get('request').get('teardown_hooks')
-        testcase_teardown_hooks_datas_list = handle_datas.handle_data6(testcase_teardown_hooks_datas)
-
-        selected_configure_id = testcase_include.get('config')
-        selected_interface_id = testcase_obj.interface_id
-        selected_project_id = Interfaces.objects.get(id=selected_interface_id).project_id
-        selected_testcase_id = testcase_include.get('testcases')
-
-        datas = {
-            'author': testcase_obj.author,
-            'testcase_name': testcase_obj.name,
-            'selected_configure_id': selected_configure_id,
-            'selected_interface_id': selected_interface_id,
-            'selected_project_id': selected_project_id,
-            'selected_testcase_id': selected_testcase_id,
-
-            'method': testcase_request_datas.get('method'),
-            'url': testcase_request_datas.get('url'),
-            'param': testcase_param_list,
-            'header': testcase_headers_list,
-            'variable': testcase_from_dasts_list,  # form表单数据
-            'jsonVariable': testcase_json_datas,
-
-            'extract': testcase_extract_datas_list,
-            'validate': testcase_validate_list,
-            'globalVar': testcase_variables_list,
-            'parameterized': testcase_parameters_datas_list,
-            'setupHooks': testcase_setup_hooks_datas_list,
-            'teardownHooks': testcase_teardown_hooks_datas_list,
-
-        }
-        return Response({
-            "code": 200,
-            "data": {"data": datas},
-            "message": "OK",
-        })
-        # return Response(datas)
-
-    @action(detail=True)
-    def configs(self, request, pk=None):
-        configs_objs = Configures.objects.filter(interface_id=pk, is_delete=False)
-        one_list = []
-        for obj in configs_objs:
-            one_list.append({
-                'id': obj.id,
-                'name': obj.name
-            })
-        return Response(data=one_list)
-
-    @action(methods=['post'], detail=True)
-    def run(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid()
-        datas = serializer.validated_data
-
-        env_id = datas.get('env_id')
-        testcase_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
-        os.mkdir(testcase_path)
-        # first()返回queryset查询集第一项
         env = Envs.objects.filter(id=env_id, is_delete=False).first()
+        envs_url = env.base_url
 
-        # 生成yml文件
-        common.generate_testcase_files(instance, env, testcase_path)
-        # 运行用例
-        return common.run_testcase(instance, testcase_path)
-
-    def get_serializer_class(self):
-        if self.action == 'run':
-            return TestcaseRunSerializer
+        base_url = testcase.get('url')
+        if base_url.startswith('http') or base_url.startswith('https'):
+            pass
         else:
-            return TestcaseModeSerializer
+            base_url = envs_url + base_url
+
+        http_session = HttpSession()
+
+        http_debug = None
+        if request_data_type == "Json":
+            http_debug = HttpTestcaseDebug(http_session=http_session, name=name, url=base_url, method=method,
+                                           headers=headers,
+                                           request_data_type=request_data_type,
+                                           json_data=request_data, expect_result=expect_result)
+        elif request_data_type == "Form Data":
+            http_debug = HttpTestcaseDebug(http_session=http_session, name=name, url=base_url, method=method,
+                                           headers=headers,
+                                           request_data_type=request_data_type,
+                                           form_data=request_data, expect_result=expect_result)
+
+        testcase_result = http_debug.debug()
+        testcase_result.update({
+            "api": api.id,
+            "api_name": api.name,
+            "testcase": testcase.get('id'),
+            "testcase_name": testcase.get('name'),
+            "request_data_type": request_data_type,
+            'is_periodictask': False
+        })
+        return Response({
+            "code": 200,
+            "data": {"data": testcase_result},
+            "message": "OK",
+        })
+
+
+class TestcaseBatchAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        testcases = data.get('testcases')
+        version = get_version()
+
+        # 异步执行
+        batch_exec_testcase(testcases=testcases, version=version)
+
+        return Response({
+            "code": 200,
+            "data": '程序正在后台运行中,请稍后查看结果……',
+            "message": "OK",
+        })
+

@@ -34,6 +34,7 @@ class Interfaces(BaseModel):
     envs = models.ForeignKey('envs.Envs', on_delete=models.CASCADE,
                                 related_name='envs', help_text='运行环境')
     tester = models.CharField(verbose_name='测试人员', max_length=50, help_text='测试人员')
+    desc = models.CharField(verbose_name='描述信息', max_length=200, null=True, blank=True, default='', help_text='描述信息')
 
     class Meta:
         db_table = 'tb_interfaces'

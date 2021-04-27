@@ -13,7 +13,7 @@ from rest_framework.response import Response
 
 from testcases.models import Testcases
 from envs.models import Envs
-from reports.models import Reports
+from testcase_reports.models import Reports
 from debugtalks.models import Debugtalks
 from configures.models import Configures
 

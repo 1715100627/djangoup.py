@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 # 注册路由
 # 1.路由前缀 2.视图集
 router.register(r'interfaces', views.InterfacesViewSet)
+router.register(r'interfaadd', views.CreateModelViewSet)
 urlpatterns = [
 ]
 urlpatterns += router.urls

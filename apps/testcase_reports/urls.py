@@ -1,6 +1,6 @@
 # from .views import index
 from django.urls import path, include
-from reports import views
+from testcase_reports import views
 from rest_framework import routers
 
 # 创建路由对象
@@ -8,7 +8,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 # 注册路由
 # 1.路由前缀 2.视图集
-router.register(r'reports', views.ReportViewSet)
+router.register(r'testcase_reports', views.ReportViewSet)
 urlpatterns = [
 ]
 urlpatterns += router.urls
