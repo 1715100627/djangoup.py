@@ -21,18 +21,19 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('projects.urls')),
-    path('', include('envs.urls')),
-    path('', include('interfaces.urls')),
-    path('', include('debugtalks.urls')),
-    path('', include('testsuits.urls')),
-    path('', include('configures.urls')),
-    path('', include('testcases.urls')),
-    path('', include('testcase_reports.urls')),
-    path('', include('summary.urls')),
-    path('', include('module.urls')),
+    path('', include('apps.HttpTestcas.urls')),
+    # path('', include('envs.urls')),
+    # path('', include('interfaces.urls')),
+    # # path('', include('debugtalks.urls')),
+    # path('', include('testsuite.urls')),
+    # # path('', include('configures.urls')),
+    # path('', include('testcases.urls')),
+    # path('', include('testcase_reports.urls')),
+    # # path('', include('summary.urls')),
+    # path('', include('module.urls')),
+    # path('', include('reports_details.urls')),
     path('docs/', include_docs_urls(title='接口文档',
                                     description='接口自动化测试平台')),
     path('api/', include('rest_framework.urls')),
-    path('user/', include('user.urls'))
+    # path('user/', include('user.urls'))
 ]

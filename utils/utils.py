@@ -1,8 +1,7 @@
 import re
-from interfaces.models import Interfaces
+from HttpTestcas.models import Interfaces
 from django.db.models import Count
-from testsuits.models import Testsuits
-
+# from testsuite.models import Testsuite
 
 def get_paginated_response(datas):
     list = []
@@ -37,7 +36,7 @@ def get_paginated_response(datas):
         # testsuits_count = Testsuits.objects.filter(project_id=project_id,is_delete=False).count()
 
         # item['interfaces'] = interfaces_count
-        # item['testsuits'] = testsuits_count
+        # item['testsuite'] = testsuits_count
         # item['testcases'] = testcases_count
         # item['configures'] = configures_count
 

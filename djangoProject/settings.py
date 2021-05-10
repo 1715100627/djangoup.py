@@ -45,17 +45,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
 
-    'user.apps.UserConfig',
-    'projects.apps.ProjectsConfig',
-    'interfaces.apps.InterfacesConfig',
-    'configures.apps.ConfiguresConfig',
-    'debugtalks.apps.DebugtalksConfig',
-    'envs.apps.EnvsConfig',
-    'testcase_reports.apps.ReportsConfig',
-    'testcases.apps.TestcasesConfig',
-    'testsuits.apps.TestsuitsConfig',
-    'summary.apps.SummaryConfig',
-    'module.apps.ModuleConfig',
+    'apps.HttpTestcas',
 ]
 # 渲染api页面
 REST_FRAMEWORK = {
@@ -191,4 +181,36 @@ SUITES_DIR = os.path.join(BASE_DIR, 'suites')
 # 收集静态文件
 # 1.在项目根目录下创建static文件夹
 # 2.执行收集命令：python manage.py collectstatic
-STATIC_ROOT = os.path.join(BASE_DIR,'front_ends/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'front_ends/static')
+
+
+# Celery定时任务配置
+
+# 不使用国际标准时间
+CELERY_ENABLE_UTC = False
+# 使用亚洲/上海时区
+CELERY_TIMEZONE = 'Asia/Shanghai'
+# 解决时区问题
+CELERY_BEAT_TZ_AWARE = False
+# Broker配置，使用Redis作为消息中间件
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+# 使用redis作为中间件
+CELERY_BROKER_TRANSPORT = 'redis'
+# BACKEND配置，使用数据库作为结果存储[redis、数据库二选一]
+# CELERY_RESULT_BACKEND = 'django-db'
+# BACKEND配置，使用Redis作为结果存储[redis、数据库二选一，本配置选择redis作为任务结果存储]
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+# 设置任务接收的序列化类型
+CELERY_ACCEPT_CONTENT = ['application/json']
+# 设置任务序列化方式
+CELERY_TASK_SERIALIZER = 'json'
+# 设置任务结果序列化方式
+CELERY_RESULT_SERIALIZER = 'json'
+# 任务结果过期时间
+CELERY_TASK_RESULT_EXPIRES = 24 * 60 * 60
+# 配置定时器模块，定时器信息存储在数据库中
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+# celery worker 每次去redis取任务的数量
+CELERYD_PREFETCH_MULTIPLIER = 4
+# 每个worker执行了多少任务就会死掉
+CELERYD_MAX_TASKS_PER_CHILD = 200
