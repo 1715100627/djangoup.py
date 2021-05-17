@@ -48,7 +48,7 @@ class Validator(object):
                 fun = comparators_built[comparators]
                 fun(actual_value=actual_value, expect_value=expect_value)
             except (AssertionError, TypeError):
-                validate_pass = 'FAIl'
+                validate_pass = 'FAIL'
                 continue
             else:
                 failure_reason = []

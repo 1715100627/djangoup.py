@@ -3,10 +3,10 @@ from utils.base_models import BaseModel
 
 
 class Testsuite2Testcase(BaseModel):
-    testsuite = models.ForeignKey(to='Testsuite', related_name='testsuite', on_delete=models.CASCADE,
+    testsuite = models.ForeignKey(to='Testsuite', related_name='testsuite2testcase', on_delete=models.CASCADE,
                                   verbose_name='测试场景')
-    testcases = models.ForeignKey(to='Testcases', related_name='testcases', on_delete=models.CASCADE,
-                                  verbose_name='测试用例', null=True)
+    testcase = models.ForeignKey(to='Testcases', related_name='testsuite2testcase', on_delete=models.CASCADE,
+                                 verbose_name='测试用例', null=True)
     type_choice = (
         ('HTTP_API', 'http api接口'),
         ('EXT_METHOD', '扩展方法')
@@ -20,7 +20,7 @@ class Testsuite2Testcase(BaseModel):
     loop_count = models.IntegerField(null=False, blank=False, default=1, verbose_name='循环次数')
 
     testsuite_name = models.CharField(null=False, blank=False, max_length=128, verbose_name='测试场景名称')
-    testcase_name = models.CharField(null=True, blank=True, max_length=128, verbose_name='测试场景名称')
+    testcase_name = models.CharField(null=True, blank=True, max_length=128, verbose_name='测试用例备注')
     url = models.TextField(null=True, blank=True, verbose_name='接口请求URL')
     headers = models.TextField(null=True, blank=True, verbose_name='接口请求头')
     request_data_type_choice = (
@@ -34,6 +34,6 @@ class Testsuite2Testcase(BaseModel):
     expect_result = models.TextField(null=True, blank=True, verbose_name='期望结果')
 
     class Meta:
-        verbose_name = '场景用例'
-        verbose_name_plural = verbose_name
         db_table = 'db_testsuite2testcase'
+        verbose_name = '场景用例详情'
+        verbose_name_plural = verbose_name

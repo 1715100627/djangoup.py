@@ -1,6 +1,6 @@
 import json
 from .validators import Validator
-from testcase_reports.models import Reports
+from apps.HttpTestcas.models.testcase_reports import TestcaseReports
 
 
 class HttpTestcaseRun(object):
@@ -74,11 +74,11 @@ class HttpTestcaseRun(object):
             "elapsed_ms": res_obj["response"]["elapsed"],
             "status": results
         }
-        if results == 'FAIl':
+        if results == 'FAIL':
             testcase_result.update({
                 'failure_reason': json.dumps(calibration, ensure_ascii=False)
             })
 
-        testcase_result = Reports(**testcase_result)
+        testcase_result = TestcaseReports(**testcase_result)
         testcase_result_list.append(testcase_result)
         return testcase_result_list

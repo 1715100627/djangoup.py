@@ -5,7 +5,7 @@ from utils.base_models import BaseModel
 class Module(BaseModel):
     id = models.AutoField(verbose_name='ID主键', primary_key=True, help_text='ID主键')
     name = models.CharField(verbose_name='模块名称', max_length=200, unique=True, help_text='模块名称')
-    project = models.ForeignKey('projects.Projects', related_name='models', on_delete=models.CASCADE, null=True, blank=True,
+    project = models.ForeignKey(to='Projects', related_name='models', on_delete=models.CASCADE, null=True, blank=True,
                                 verbose_name='所属项目')
     parent = models.ForeignKey(to='Module', related_name='+', on_delete=models.CASCADE, null=True, blank=True,
                                verbose_name='父节点')

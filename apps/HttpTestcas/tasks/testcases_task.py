@@ -4,8 +4,8 @@ from HttpTestcas.core.http_dlient import HttpSession
 from HttpTestcas.core.http_testcase_run import HttpTestcaseRun
 from HttpTestcas.models import Testcases
 import threading
-from testcase_reports.utils import get_version
-from testcase_reports.models import Reports
+from HttpTestcas.core.utils import get_version
+from HttpTestcas.models import TestcaseReports
 
 
 def run_testcase(testcases=None, version=None):
@@ -32,7 +32,7 @@ def run_testcase(testcases=None, version=None):
             if testcase_list:
                 testcase.status = testcase_list.status
                 testcase_status.append(testcase)
-    Reports.objects.bulk_create(testcase_version_list)
+    TestcaseReports.objects.bulk_create(testcase_version_list)
     Testcases.objects.bulk_update(testcase_status, fields=['status'])
 
 

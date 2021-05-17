@@ -1,3 +1,3 @@
-from django.test import TestCase
+from HttpTestcas.models.testsuite import *
 
-# Create your tests here.
+Testsuite.objects.filter(id=1)

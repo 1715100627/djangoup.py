@@ -2,9 +2,9 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
-from testcase_reports.models import Reports
-from testcase_reports.serializer import ReportsSerializer
-from .filter import Test_reportsFilter
+from HttpTestcas.models import TestcaseReports
+from HttpTestcas.serializers import ReportsSerializer
+from HttpTestcas.filters import Test_reportsFilter
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -17,7 +17,7 @@ from django.conf import settings
 
 
 class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Reports.objects.filter(is_delete=False)
+    queryset = TestcaseReports.objects.filter(is_delete=False)
     serializer_class = ReportsSerializer
     # 过滤
     filter_class = Test_reportsFilter

@@ -27,11 +27,11 @@ class Interfaces(BaseModel):
     request_data = models.TextField(null=True, blank=True, verbose_name='接口请求体参数')
     # 第一个为关联的模型路径(应用名.模型类)
     # 第二个设置为父表删除，字表处理方式 CASCADE父表删除字表自动删除 SET_NULL被设置为none PROJECT报错 SET_DEFAULT设置默认值
-    project = models.ForeignKey('projects.Projects', on_delete=models.CASCADE,
+    project = models.ForeignKey(to='Projects', on_delete=models.CASCADE,
                                 related_name='interfaces', help_text='所属项目')
-    module = models.ForeignKey('module.Module', related_name='module', on_delete=models.CASCADE, null=True, blank=True,
+    module = models.ForeignKey(to='Module', related_name='module', on_delete=models.CASCADE, null=True, blank=True,
                                verbose_name='所属模块')
-    envs = models.ForeignKey('envs.Envs', on_delete=models.CASCADE,
+    envs = models.ForeignKey(to='Envs', on_delete=models.CASCADE,
                                 related_name='envs', help_text='运行环境')
     tester = models.CharField(verbose_name='测试人员', max_length=50, help_text='测试人员')
     desc = models.CharField(verbose_name='描述信息', max_length=200, null=True, blank=True, default='', help_text='描述信息')

@@ -22,10 +22,13 @@ router.register(r'testcases', TestcasesViewSet)
 router.register(r'testcaseslist', TestcaseListViewSet)
 router.register(r'testsuite', TestsuiteList)
 router.register(r'testsuitec', TestsuiteViewSet)
+router.register(r'testsuite2testcase', Testsuite2TestcaseViewSet)
+router.register(r'testsuite_reports', TestsuiteReportsViewSet)
 
 urlpatterns = [
     url(r'reports_details/', TestcaseReportsDetails.as_view()),
     url(r'testcases/batch/', TestcaseBatchAPIView.as_view()),
+    url(r'testsuite/batch/', TestsuiteBatchAPIView.as_view()),
     path('login/', obtain_jwt_token),
     path('info/', get_user_info)
 ]

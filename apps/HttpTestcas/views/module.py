@@ -1,10 +1,11 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from projects.models import Projects
-from module.models import Module
+from HttpTestcas.models import Projects
+from HttpTestcas.models import Module
 from rest_framework import viewsets, status
-from module.serializer import ModuleModeSerializer, ModuleFindModeSerializer,ModuleCreadModeSerializer,ModuleListModeSerializer
+from HttpTestcas.serializers import ModuleModeSerializer, ModuleFindModeSerializer, ModuleCreadModeSerializer, \
+    ModuleListModeSerializer
 
 
 class ModularViewSet(viewsets.ModelViewSet):
@@ -82,7 +83,7 @@ class CreateModularViewSet(viewsets.ModelViewSet):
         # project = Projects.objects.filter(id=request.data.get('project')).filter()
         # requests = request.data.pop('project')
         # request.data['project'] = project
-        response = super().update(request,*args, **kwargs)
+        response = super().update(request, *args, **kwargs)
         return Response({
             "code": 200,
             "data": {"data": response.data},

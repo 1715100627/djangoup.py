@@ -3,7 +3,7 @@ from utils.base_models import BaseModel
 from HttpTestcas.core.utils import get_version as version
 
 
-class Reports(BaseModel):
+class TestcaseReports(BaseModel):
     id = models.AutoField(verbose_name='ID主键', primary_key=True, help_text='ID主键')
     url = models.TextField(verbose_name='url', null=True, blank=True)
     method_choice = (
@@ -34,13 +34,13 @@ class Reports(BaseModel):
     status = models.CharField(max_length=11, null=False, blank=False, default='FAIL', choices=status_choice,
                               verbose_name='是否测试通过')
     failure_reason = models.TextField(null=True, blank=True, verbose_name='测试未通过原因')
-    project = models.ForeignKey(to='projects.Projects', related_name='+', on_delete=models.SET_NULL, null=True, blank=True,
+    project = models.ForeignKey(to='Projects', related_name='+', on_delete=models.SET_NULL, null=True, blank=True,
                                 verbose_name='所属项目')
     project_name = models.CharField(null=False, blank=False, max_length=128, verbose_name='项目名称')
-    api = models.ForeignKey(to='interfaces.Interfaces', related_name='+', on_delete=models.SET_NULL, null=True, blank=True,
+    api = models.ForeignKey(to='Interfaces', related_name='+', on_delete=models.SET_NULL, null=True, blank=True,
                             verbose_name='所属接口')
     api_name = models.CharField(null=False, blank=False, max_length=128, verbose_name='接口名称')
-    testcase = models.ForeignKey(to='testcases.Testcases', related_name='testcase_result', on_delete=models.SET_NULL, null=True,
+    testcase = models.ForeignKey(to='Testcases', related_name='testcase_result', on_delete=models.SET_NULL, null=True,
                                  blank=True, verbose_name='所属用例')
     testcase_name = models.CharField(null=False, blank=False, max_length=128, verbose_name='用例名称')
 

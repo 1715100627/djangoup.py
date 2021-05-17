@@ -32,7 +32,7 @@ class Testcases(BaseModel):
     )
     status = models.CharField(max_length=11, null=False, blank=False, default='INITIAL', choices=status_choice,
                               verbose_name='是否测试通过')
-    api = models.ForeignKey(to='interfaces.Interfaces', related_name='testcase', on_delete=models.SET_NULL, null=True,
+    api = models.ForeignKey(to='Interfaces', related_name='testcase', on_delete=models.SET_NULL, null=True,
                             blank=True,
                             verbose_name='所属接口')
 

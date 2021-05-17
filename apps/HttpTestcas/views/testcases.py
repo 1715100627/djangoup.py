@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from testcase_reports.utils import get_version
-from testcases.models import Testcases
-from testcases.serializer import TestcaseModeSerializer, TestcaseListSerializer
+from HttpTestcas.core.utils import get_version
+from HttpTestcas.models import Testcases
+from HttpTestcas.serializers.testcases import TestcaseModeSerializer, TestcaseListSerializer
 import json
 from rest_framework.views import APIView
 import os
@@ -13,11 +13,11 @@ from django.conf import settings
 from rest_framework.decorators import action
 from utils.utils import get_paginated_response
 from utils import handle_datas
-from interfaces.models import Interfaces
-from .testcases_task import batch_exec_testcase
-from envs.models import Envs
-from .http_dlient import HttpSession
-from .testcase_debug import HttpTestcaseDebug
+from HttpTestcas.models import Interfaces
+from HttpTestcas.tasks.testcases_task import batch_exec_testcase
+from HttpTestcas.models import Envs
+from HttpTestcas.core.http_dlient import HttpSession
+from HttpTestcas.tasks.testcase_debug import HttpTestcaseDebug
 
 
 class TestcaseListViewSet(ReadOnlyModelViewSet):

@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 
-from testcase_reports.models import Reports
+from HttpTestcas.models import TestcaseReports
 from rest_framework.views import APIView
 from django.db.models import Sum
-from testcase_reports.serializer import ReportsSerializer
+from HttpTestcas.serializers import ReportsSerializer
 
 
 class TestcaseReportsDetails(APIView):
@@ -13,7 +13,7 @@ class TestcaseReportsDetails(APIView):
         version = request.query_params.get('version')
         status = request.query_params.get('status', None)
         if version:
-            testcase_results = Reports.objects.filter(version=version, is_delete=False)
+            testcase_results = TestcaseReports.objects.filter(version=version, is_delete=False)
             testcase_count = testcase_results.count()
             success = testcase_results.filter(status='PASS').count()
             fail = testcase_results.filter(status='FAIL').count()

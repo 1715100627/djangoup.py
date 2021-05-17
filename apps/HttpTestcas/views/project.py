@@ -5,16 +5,16 @@ from rest_framework.response import Response
 
 
 from utils.utils import get_paginated_response_create
-from projects.models import Projects
-from interfaces.models import Interfaces
-from projects.serializer import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer,ProjectCreModeserializer
+from HttpTestcas.models import Projects
+from HttpTestcas.models import Interfaces
+from HttpTestcas.serializers import ProjectModeSerializer, ProjectNameSerializer, ProjectsRunSerializer,ProjectCreModeserializer
 from rest_framework.decorators import action
 from utils import common
 from datetime import datetime
 import os
 from django.conf import settings
-from envs.models import Envs
-from testcases.models import Testcases
+from HttpTestcas.models import Envs
+from HttpTestcas.models import Testcases
 
 from utils.utils import get_paginated_response
 

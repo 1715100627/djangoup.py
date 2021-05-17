@@ -51,7 +51,7 @@ class HttpTestcaseDebug(object):
             "status": results
         }
 
-        if results == 'FAIl':
+        if results == 'FAIL':
             testcase_result.update({
                 'failure_reason': json.dumps(calibration, ensure_ascii=False)
             })

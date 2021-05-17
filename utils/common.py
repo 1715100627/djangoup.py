@@ -11,9 +11,9 @@ from httprunner.exceptions import ParamsError
 from rest_framework import status
 from rest_framework.response import Response
 
-from testcases.models import Testcases
-from envs.models import Envs
-from testcase_reports.models import Reports
+from HttpTestcas.models import Testcases
+from HttpTestcas.models import Envs
+from HttpTestcas.models import TestcaseReports
 
 
 def timestamp_to_datetime(summary, type=True):
@@ -149,7 +149,7 @@ def create_report(runner, report_name=None):
         'summary': summary
         }
 
-    report_obj = Reports.objects.create(**test_report)
+    report_obj = TestcaseReports.objects.create(**test_report)
     return report_obj.id
 
 

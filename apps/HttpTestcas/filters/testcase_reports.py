@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import Reports
+from HttpTestcas.models import TestcaseReports
 
 
 class Test_reportsFilter(django_filters.rest_framework.FilterSet):
@@ -12,5 +12,5 @@ class Test_reportsFilter(django_filters.rest_framework.FilterSet):
     url = django_filters.CharFilter(field_name='url', lookup_expr='icontains')
 
     class Meta:
-        model = Reports
+        model = TestcaseReports
         fields = ['version']
